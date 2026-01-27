@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-Gaming Store</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <a href="#home" class="logo">E-Gaming</a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle Menu" aria-controls="navMenu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <nav class="menu" id="navMenu">
+      <a class="nav-link" data-route="home" href="#home">Home</a>
+
+      <!-- ✅ GAMES DROPDOWN -->
+      <div class="dropdown" id="gamesDropdown">
+        <button class="dropbtn" id="gamesDropBtn" type="button" aria-expanded="false">
+          Games <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" id="gamesDropMenu">
+          <a href="#games" data-genre="all"><i class="fa-solid fa-gamepad"></i> All Games</a>
+          <a href="#games" data-genre="Action"><i class="fa-solid fa-bolt"></i> Action</a>
+          <a href="#games" data-genre="Battle Royale"><i class="fa-solid fa-crosshairs"></i> Battle Royale</a>
+          <a href="#games" data-genre="Racing"><i class="fa-solid fa-flag-checkered"></i> Racing</a>
+          <a href="#games" data-genre="Sports"><i class="fa-solid fa-futbol"></i> Sports</a>
+          <a href="#games" data-genre="RPG"><i class="fa-solid fa-hat-wizard"></i> RPG</a>
+        </div>
+      </div>
+
+      <a class="nav-link" data-route="about" href="#about">About Us</a>
+      <a class="nav-link" data-route="contact" href="#contact">Contact Us</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="#login" class="nav-btn login-btn" id="authBtn">Login</a>
+    </div>
+  </div>
+</header>
+
+<section class="slogan-bar">
+  <span id="sloganText">Power Your Gaming Experience</span>
+</section>
+
+<main class="page">
+  <div class="container">
+
+    <!-- HOME -->
+    <section class="route" id="route-home" data-route="home">
+      <div class="home-head">
+        <div>
+          <h2>Featured Products</h2>
+          <p>Top picks for your gaming setup.</p>
+        </div>
+        <span class="pill"><i class="fa-solid fa-shield"></i> Genuine Products</span>
+      </div>
+
+      <section class="filters" aria-label="Product filters">
+        <div class="field">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="search" placeholder="Search products" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <i class="fa-solid fa-layer-group"></i>
+          <select id="category">
+            <option value="all">All</option>
+            <option>PC</option>
+            <option>Laptop</option>
+            <option>Monitor</option>
+            <option>Accessories</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <i class="fa-solid fa-arrow-up-wide-short"></i>
+          <select id="sort">
+            <option value="default">Sort</option>
+            <option value="low">Low → High</option>
+            <option value="high">High → Low</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="products" id="products"></div>
+    </section>
+
+    <!-- GAMES -->
+    <section class="route" id="route-games" data-route="games">
+      <div class="home-head">
+        <div>
+          <h2>Buy Games</h2>
+          <p id="gamesSub">Choose your favorite games. Instant digital delivery.</p>
+        </div>
+        <span class="pill"><i class="fa-solid fa-bolt"></i> Instant Delivery</span>
+      </div>
+
+      <section class="filters" aria-label="Game filters">
+        <div class="field">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="gSearch" placeholder="Search games" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <i class="fa-solid fa-layer-group"></i>
+          <select id="gGenre">
+            <option value="all">All Genres</option>
+            <option>Action</option>
+            <option>Battle Royale</option>
+            <option>Racing</option>
+            <option>Sports</option>
+            <option>RPG</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <i class="fa-solid fa-arrow-up-wide-short"></i>
+          <select id="gSort">
+            <option value="default">Sort</option>
+            <option value="low">Low → High</option>
+            <option value="high">High → Low</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="products" id="gamesGrid"></div>
+    </section>
+
+    <!-- CHECKOUT (NO NAV LINK) -->
+    <section class="route" id="route-checkout" data-route="checkout">
+      <div class="page-head">
+        <h1>Checkout</h1>
+        <p>Review your items and confirm payment details.</p>
+      </div>
+
+      <div class="checkout-grid">
+        <div class="checkout-card">
+          <h3><i class="fa-solid fa-receipt"></i> Order Summary</h3>
+
+          <div class="summary-list" id="summaryList"></div>
+
+          <div class="summary-line">
+            <span>Subtotal</span>
+            <b id="sumSubtotal">৳ 0</b>
+          </div>
+          <div class="summary-line">
+            <span>Delivery</span>
+            <b id="sumDelivery">৳ 0</b>
+          </div>
+          <div class="summary-line">
+            <span>Service Fee</span>
+            <b id="sumFee">৳ 0</b>
+          </div>
+<!-- ✅ COUPON -->
+<div class="coupon-box">
+  <label class="coupon-label">Discount Coupon</label>
+
+  <div class="coupon-row">
+    <div class="input">
+      <i class="fa-solid fa-ticket"></i>
+      <input id="couponCode" placeholder="Enter coupon (ex: EG10)" />
+    </div>
+
+    <button class="btn btn-ghost" id="applyCouponBtn" type="button">
+      Apply
+    </button>
+  </div>
+
+  <div class="coupon-msg" id="couponMsg"></div>
+</div>
+
+          <div class="summary-total">
+            <span>Total</span>
+            <b id="sumTotal">৳ 0</b>
+          </div>
+
+          <div class="checkout-actions">
+            <button class="btn btn-ghost" id="clearCartBtn" type="button">
+              <i class="fa-solid fa-trash"></i> Clear
+            </button>
+            <button class="btn btn-dark" id="placeOrderBtn" type="button">
+              <i class="fa-solid fa-lock"></i> Place Order
+            </button>
+          </div>
+
+          <div class="form-msg" id="orderMsg"></div>
+        </div>
+
+        <div class="checkout-card">
+          <h3><i class="fa-solid fa-credit-card"></i> Payment</h3>
+
+          <div class="pay-grid" id="payGrid">
+            <label class="pay-option">
+              <input type="radio" name="pay" value="bkash" checked>
+              <span class="pay-box">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <b>bKash</b>
+                <small>Send Money</small>
+              </span>
+            </label>
+
+            <label class="pay-option">
+              <input type="radio" name="pay" value="nagad">
+              <span class="pay-box">
+                <i class="fa-solid fa-mobile"></i>
+                <b>Nagad</b>
+                <small>Send Money</small>
+              </span>
+            </label>
+
+            <label class="pay-option">
+              <input type="radio" name="pay" value="rocket">
+              <span class="pay-box">
+                <i class="fa-solid fa-bolt"></i>
+                <b>Rocket</b>
+                <small>Send Money</small>
+              </span>
+            </label>
+
+            <label class="pay-option">
+              <input type="radio" name="pay" value="card">
+              <span class="pay-box">
+                <i class="fa-solid fa-credit-card"></i>
+                <b>Card</b>
+                <small>Visa/Master</small>
+              </span>
+            </label>
+          </div>
+
+          <div class="pay-form">
+            <label>Phone / Card Info</label>
+            <div class="input">
+              <i class="fa-solid fa-hashtag"></i>
+              <input id="payRef" placeholder="Transaction ID / Card last 4 / Phone" />
+            </div>
+
+            <label>Delivery Email (Games)</label>
+            <div class="input">
+              <i class="fa-solid fa-at"></i>
+              <input id="deliveryEmail" type="email" placeholder="you@email.com" />
+            </div>
+
+            <div class="chip-row">
+              <span class="chip"><i class="fa-solid fa-shield"></i> Secure</span>
+              <span class="chip"><i class="fa-solid fa-truck-fast"></i> Fast</span>
+              <span class="chip"><i class="fa-solid fa-circle-check"></i> Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ✅ SUCCESS -->
+      <div class="success-box" id="successBox">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h2>Order Successful</h2>
+        <p id="successText">Thanks! Your order has been placed.</p>
+
+        <!-- ✅ TRACKING -->
+        <div class="invoice-wrap" id="trackWrap" style="margin-top:14px;">
+          <div class="invoice-head">
+            <div>
+              <h3>Purchase Route</h3>
+              <p class="muted">Track where your order is right now.</p>
+            </div>
+            <button class="btn btn-ghost" id="refreshTrackBtn" type="button">
+              <i class="fa-solid fa-rotate"></i> Refresh
+            </button>
+          </div>
+          <div class="invoice-card" id="trackCard"></div>
+        </div>
+
+        <!-- ✅ INVOICE -->
+        <div class="invoice-wrap" id="invoiceWrap">
+          <div class="invoice-head">
+            <div>
+              <h3>Invoice</h3>
+              <p class="muted">Please keep this invoice for your record.</p>
+            </div>
+            <button class="btn btn-dark" id="printInvoiceBtn" type="button">
+              <i class="fa-solid fa-print"></i> Print
+            </button>
+          </div>
+
+          <div class="invoice-card" id="invoiceCard"></div>
+        </div>
+
+        <div class="success-actions">
+          <a class="btn btn-ghost" href="#home"><i class="fa-solid fa-house"></i> Back Home</a>
+          <a class="btn btn-dark" href="#games"><i class="fa-solid fa-gamepad"></i> Buy Games</a>
+        </div>
+      </div>
+
+      <!-- PRINT-ONLY BLOCK -->
+      <section class="print-area" id="printArea"></section>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="route" id="route-about" data-route="about">
+      <div class="page-hero">
+        <div class="hero-left">
+          <span class="badge"><i class="fa-solid fa-gamepad"></i> E-Gaming</span>
+          <h1>About Us</h1>
+          <p class="lead">
+            E-Gaming is built for gamers who want trusted gear, smooth browsing, and a premium shopping experience.
+            We focus on quality, value, and fast support—without breaking the clean UI.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-dark" href="#home"><i class="fa-solid fa-store"></i> Explore Products</a>
+            <a class="btn btn-ghost" href="#contact"><i class="fa-solid fa-headset"></i> Contact Support</a>
+          </div>
+
+          <div class="mini-stats">
+            <div class="stat">
+              <h3>PC • Laptop • Monitor</h3>
+              <p>All gaming essentials</p>
+            </div>
+            <div class="stat">
+              <h3>Games Store</h3>
+              <p>Instant digital delivery</p>
+            </div>
+            <div class="stat">
+              <h3>Responsive UI</h3>
+              <p>Mobile friendly design</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="glass-card">
+            <div class="card-top">
+              <div class="icon"><i class="fa-solid fa-shield-heart"></i></div>
+              <div>
+                <h2>Our Promise</h2>
+                <p>Gaming-grade experience, every time.</p>
+              </div>
+            </div>
+
+            <ul class="points">
+              <li><i class="fa-solid fa-check"></i> Realistic product cards & info</li>
+              <li><i class="fa-solid fa-check"></i> Games store with genre filter</li>
+              <li><i class="fa-solid fa-check"></i> Checkout + invoice + print</li>
+              <li><i class="fa-solid fa-check"></i> Same clean design system</li>
+            </ul>
+
+            <div class="card-bottom">
+              <div class="chip"><i class="fa-solid fa-truck-fast"></i> Quick Delivery</div>
+              <div class="chip"><i class="fa-solid fa-shield"></i> Genuine Items</div>
+              <div class="chip"><i class="fa-solid fa-lock"></i> Secure Checkout</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h2>Why people choose us</h2>
+        <p>Simple, fast, premium—so you can decide quickly.</p>
+      </div>
+
+      <div class="cards-3">
+        <article class="info-card">
+          <div class="ic-icon"><i class="fa-solid fa-bolt"></i></div>
+          <h3>Fast Experience</h3>
+          <p>Quick browsing with clean product cards, smooth hover effects, and smart panels.</p>
+        </article>
+
+        <article class="info-card">
+          <div class="ic-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+          <h3>Compare Products</h3>
+          <p>Pick items and compare instantly—perfect for confident decisions.</p>
+        </article>
+
+        <article class="info-card">
+          <div class="ic-icon"><i class="fa-solid fa-receipt"></i></div>
+          <h3>Invoice & Print</h3>
+          <p>Order ID + invoice details + print button included after checkout.</p>
+        </article>
+      </div>
+
+      <div class="cta">
+        <div class="cta-box">
+          <div>
+            <h2>Ready to upgrade your setup?</h2>
+            <p>Explore our latest products and build your dream station.</p>
+          </div>
+          <a class="btn btn-dark" href="#home"><i class="fa-solid fa-arrow-right"></i> Shop Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="route" id="route-contact" data-route="contact">
+      <div class="page-head">
+        <h1>Contact Us</h1>
+        <p>We reply fast. Send us your query and we’ll get back to you.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3><i class="fa-solid fa-headset"></i> Support</h3>
+          <p class="muted">9AM – 8PM (BD Time)</p>
+          <div class="contact-line"><span>Hotline</span><b class="accent">16793</b></div>
+          <div class="contact-line"><span>Email</span><b>support@egaming.com</b></div>
+          <div class="contact-line"><span>Location</span><b>Dhaka, Bangladesh</b></div>
+
+          <div class="contact-badges">
+            <span class="chip"><i class="fa-solid fa-truck-fast"></i> Quick Response</span>
+            <span class="chip"><i class="fa-solid fa-shield"></i> Trusted</span>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <h3><i class="fa-solid fa-envelope"></i> Send a Message</h3>
+
+          <form id="contactForm" class="form">
+            <label>Your Name</label>
+            <div class="input">
+              <i class="fa-solid fa-user"></i>
+              <input id="cName" required placeholder="Your name" />
+            </div>
+
+            <label>Email</label>
+            <div class="input">
+              <i class="fa-solid fa-at"></i>
+              <input id="cEmail" type="email" required placeholder="you@email.com" />
+            </div>
+
+            <label>Message</label>
+            <div class="textarea">
+              <i class="fa-solid fa-message"></i>
+              <textarea id="cMsg" required placeholder="Write your message..."></textarea>
+            </div>
+
+            <button class="btn btn-dark w100" type="submit">
+              <i class="fa-solid fa-paper-plane"></i> Send
+            </button>
+
+            <div class="form-msg" id="contactMsg"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGIN -->
+    <section class="route" id="route-login" data-route="login">
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-head">
+            <a class="brand" href="#home">E-Gaming</a>
+            <p>Login to manage your cart and checkout faster.</p>
+          </div>
+
+          <form id="loginForm" class="auth-form">
+            <label>Email</label>
+            <div class="input">
+              <i class="fa-solid fa-at"></i>
+              <input id="loginEmail" type="email" required placeholder="you@email.com">
+            </div>
+
+            <label>Password</label>
+            <div class="input">
+              <i class="fa-solid fa-lock"></i>
+              <input id="loginPass" type="password" required placeholder="••••••••">
+            </div>
+
+            <button class="auth-btn" type="submit">Login</button>
+            <div class="msg" id="loginMsg"></div>
+
+            <div class="auth-row">
+              <span class="muted">Don't have an account?</span>
+              <a class="link" href="#register">Register</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- REGISTER -->
+    <section class="route" id="route-register" data-route="register">
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-head">
+            <a class="brand" href="#home">E-Gaming</a>
+            <p>Create your account in seconds.</p>
+          </div>
+
+          <form id="registerForm" class="auth-form">
+            <label>Full Name</label>
+            <div class="input">
+              <i class="fa-solid fa-user"></i>
+              <input id="regName" required placeholder="Your name">
+            </div>
+
+            <label>Email</label>
+            <div class="input">
+              <i class="fa-solid fa-at"></i>
+              <input id="regEmail" type="email" required placeholder="you@email.com">
+            </div>
+
+            <label>Password</label>
+            <div class="input">
+              <i class="fa-solid fa-lock"></i>
+              <input id="regPass" type="password" required placeholder="Create a password">
+            </div>
+
+            <button class="auth-btn" type="submit">Create Account</button>
+            <div class="msg" id="regMsg"></div>
+
+            <div class="auth-row">
+              <span class="muted">Already have an account?</span>
+              <a class="link" href="#login">Login</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<button class="floating compare" id="compareFab" type="button" aria-label="Open compare">
+  <i class="fa-solid fa-code-compare"></i>
+</button>
+
+<button class="floating cart" id="cartFab" type="button" aria-label="Open cart">
+  <i class="fa-solid fa-cart-shopping"></i>
+  <span id="cartCount">0</span>
+</button>
+
+<aside id="cartPanel" class="panel cart-panel" aria-label="Cart panel">
+  <div class="panel-head">
+    <h3>Cart</h3>
+    <button class="panel-close" id="cartClose" aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <div id="cartItems" class="panel-body cart-items"></div>
+
+  <div class="panel-footer cart-footer">
+    <p class="total">Total: <span>৳ <b id="cartTotal">0</b></span></p>
+    <button class="checkout-btn" id="checkoutBtn" type="button">Checkout</button>
+  </div>
+</aside>
+
+<aside id="comparePanel" class="panel side-panel" aria-label="Compare panel">
+  <div class="panel-head">
+    <h3>Compare</h3>
+    <button class="panel-close" id="compareClose" aria-label="Close compare"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <div id="compareItems" class="panel-body"></div>
+</aside>
+
+<!-- DETAILS MODAL -->
+<div class="modal" id="productModal" aria-hidden="true">
+  <div class="modal-overlay" data-close="1"></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Item details">
+    <button class="modal-close" data-close="1" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close="1" type="button">Back</button>
+      <button class="btn btn-dark" id="modalCheckout" type="button">
+        <i class="fa-solid fa-bag-shopping"></i> Checkout
+      </button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <h4>SUPPORT</h4>
+      <p>9AM – 8PM</p>
+      <p class="hotline">16793</p>
+    </div>
+
+    <div>
+      <h4>ABOUT</h4>
+      <a href="#about">About</a>
+      <a href="#contact">Delivery</a>
+      <a href="#contact">Privacy</a>
+    </div>
+
+    <div>
+      <h4>COMPANY</h4>
+      <a href="#about">Company</a>
+      <a href="#about">Career</a>
+      <a href="#about">Brands</a>
+    </div>
+
+    <div>
+      <h4>CONTACT</h4>
+      <p>Dhaka, Bangladesh</p>
+      <p class="email">support@egaming.com</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">© 2026 E-Gaming Ltd</div>
+</footer>
+
+<div class="sticky-social">
+  <a class="ss facebook" href="https://www.facebook.com/egamingbd" target="_blank" aria-label="Facebook">
+    <i class="fa-brands fa-facebook-f"></i>
+  </a>
+  <a class="ss youtube" href="https://www.youtube.com/@egamingbd" target="_blank" aria-label="YouTube">
+    <i class="fa-brands fa-youtube"></i>
+  </a>
+  <a class="ss insta" href="https://www.instagram.com/egamingbd" target="_blank" aria-label="Instagram">
+    <i class="fa-brands fa-instagram"></i>
+  </a>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
