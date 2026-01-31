@@ -269,7 +269,7 @@
 
     const ping = async () => {
       try {
-        const r = await fetch(`/presence`, {
+        const r = await fetch(`/api/presence`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sid })
@@ -1510,3 +1510,4 @@
 
   init();
 })();
+
