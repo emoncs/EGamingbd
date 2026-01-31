@@ -1,55 +1,68 @@
-// /presence.js
 export default async function handler(req, res) {
+  // CORS (safe for same-origin; still ok)
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") return res.status(200).end();
+
+  const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL;
+  const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (!UPSTASH_REDIS_REST_URL || !UPSTASH_REDIS_REST_TOKEN) {
+    return res.status(500).json({ error: "Missing Upstash env vars" });
+  }
+
+  const KEY = "eg_presence_zset";
+  const WINDOW_MS = 45_000;
+  const now = Date.now();
+
+  const redis = async (commands) => {
+    const r = await fetch(`${UPSTASH_REDIS_REST_URL}/pipeline`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commands),
+    });
+    if (!r.ok) throw new Error("Upstash request failed");
+    return r.json();
+  };
+
   try {
-    if (req.method !== "POST") {
-      res.setHeader("Allow", "POST");
-      return res.status(405).json({ error: "Method not allowed" });
+    // GET = only read active count (also cleanup)
+    if (req.method === "GET") {
+      const out = await redis([
+        ["ZREMRANGEBYSCORE", KEY, 0, now - WINDOW_MS],
+        ["ZCARD", KEY],
+      ]);
+      const active = Number(out?.[1]?.result ?? 0);
+      res.setHeader("Cache-Control", "no-store");
+      return res.status(200).json({ active });
     }
 
-    const { sid } = req.body || {};
-    if (!sid || typeof sid !== "string" || sid.length < 6) {
-      return res.status(400).json({ error: "Invalid sid" });
+    // POST = ping + read active
+    if (req.method === "POST") {
+      let sid = "";
+      try {
+        sid = (req.body?.sid || "").toString();
+      } catch {}
+      if (!sid) sid = `sid_${now}_${Math.random().toString(16).slice(2)}`;
+
+      const out = await redis([
+        ["ZADD", KEY, now, sid],
+        ["ZREMRANGEBYSCORE", KEY, 0, now - WINDOW_MS],
+        ["ZCARD", KEY],
+      ]);
+
+      const active = Number(out?.[2]?.result ?? 0);
+      res.setHeader("Cache-Control", "no-store");
+      return res.status(200).json({ active });
     }
 
-    const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
-    const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
-
-    if (!UPSTASH_URL || !UPSTASH_TOKEN) {
-      return res.status(500).json({ error: "Missing Upstash env vars" });
-    }
-
-    const now = Date.now();
-    const WINDOW_MS = 45000; // active in last 45 seconds
-    const cutoff = now - WINDOW_MS;
-
-    const call = async (command) => {
-      const r = await fetch(UPSTASH_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${UPSTASH_TOKEN}`,
-        },
-        body: JSON.stringify({ command }),
-      });
-      if (!r.ok) throw new Error("Upstash error");
-      return r.json();
-    };
-
-    // Use a sorted set for presence:
-    // ZADD eg:presence <now> <sid>
-    // ZREMRANGEBYSCORE eg:presence 0 <cutoff>
-    // ZCARD eg:presence  -> count
-    await call(["ZADD", "eg:presence", now, sid]);
-    await call(["ZREMRANGEBYSCORE", "eg:presence", 0, cutoff]);
-    const countRes = await call(["ZCARD", "eg:presence"]);
-
-    // Upstash REST returns { result: <number> }
-    const active = Number(countRes?.result || 0);
-
-    // avoid caching
-    res.setHeader("Cache-Control", "no-store");
-    return res.status(200).json({ active });
+    return res.status(405).json({ error: "Method not allowed" });
   } catch (e) {
-    return res.status(200).json({ active: 0 }); // keep UI safe
+    return res.status(500).json({ error: "Server error" });
   }
 }
