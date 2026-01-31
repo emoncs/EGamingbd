@@ -1,10 +1,10 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>E-Gaming Store</title>
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -21,7 +21,6 @@
     <nav class="menu" id="navMenu">
       <a class="nav-link" data-route="home" href="#home">Home</a>
 
-      <!-- ✅ GAMES DROPDOWN -->
       <div class="dropdown" id="gamesDropdown">
         <button class="dropbtn" id="gamesDropBtn" type="button" aria-expanded="false">
           Games <i class="fa-solid fa-chevron-down"></i>
@@ -41,6 +40,13 @@
     </nav>
 
     <div class="nav-actions">
+      <!-- ✅ Live visitors in navbar (left of login) -->
+      <div class="nav-live" title="Visitors active in the last ~45 seconds" aria-label="Live visitors">
+        <span class="dot"></span>
+        <span class="txt">Live</span>
+        <b id="liveVisitors">—</b>
+      </div>
+
       <a href="#login" class="nav-btn login-btn" id="authBtn">Login</a>
     </div>
   </div>
@@ -53,14 +59,17 @@
 <main class="page">
   <div class="container">
 
-    <!-- HOME -->
     <section class="route" id="route-home" data-route="home">
       <div class="home-head">
         <div>
           <h2>Featured Products</h2>
           <p>Top picks for your gaming setup.</p>
         </div>
-        <span class="pill"><i class="fa-solid fa-shield"></i> Genuine Products</span>
+
+        <!-- ✅ removed live visitors from here, kept everything else -->
+        <div class="home-head-right">
+          <span class="pill"><i class="fa-solid fa-shield"></i> Genuine Products</span>
+        </div>
       </div>
 
       <section class="filters" aria-label="Product filters">
@@ -93,7 +102,6 @@
       <div class="products" id="products"></div>
     </section>
 
-    <!-- GAMES -->
     <section class="route" id="route-games" data-route="games">
       <div class="home-head">
         <div>
@@ -134,7 +142,6 @@
       <div class="products" id="gamesGrid"></div>
     </section>
 
-    <!-- CHECKOUT (NO NAV LINK) -->
     <section class="route" id="route-checkout" data-route="checkout">
       <div class="page-head">
         <h1>Checkout</h1>
@@ -159,23 +166,21 @@
             <span>Service Fee</span>
             <b id="sumFee">৳ 0</b>
           </div>
-<!-- ✅ COUPON -->
-<div class="coupon-box">
-  <label class="coupon-label">Discount Coupon</label>
 
-  <div class="coupon-row">
-    <div class="input">
-      <i class="fa-solid fa-ticket"></i>
-      <input id="couponCode" placeholder="Enter coupon (ex: EG10)" />
-    </div>
+          <div class="coupon-box">
+            <label class="coupon-label">Discount Coupon</label>
 
-    <button class="btn btn-ghost" id="applyCouponBtn" type="button">
-      Apply
-    </button>
-  </div>
+            <div class="coupon-row">
+              <div class="input">
+                <i class="fa-solid fa-ticket"></i>
+                <input id="couponCode" placeholder="Enter coupon (ex: EG10)" />
+              </div>
 
-  <div class="coupon-msg" id="couponMsg"></div>
-</div>
+              <button class="btn btn-ghost" id="applyCouponBtn" type="button">Apply</button>
+            </div>
+
+            <div class="coupon-msg" id="couponMsg"></div>
+          </div>
 
           <div class="summary-total">
             <span>Total</span>
@@ -257,13 +262,11 @@
         </div>
       </div>
 
-      <!-- ✅ SUCCESS -->
       <div class="success-box" id="successBox">
         <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
         <h2>Order Successful</h2>
         <p id="successText">Thanks! Your order has been placed.</p>
 
-        <!-- ✅ TRACKING -->
         <div class="invoice-wrap" id="trackWrap" style="margin-top:14px;">
           <div class="invoice-head">
             <div>
@@ -277,7 +280,6 @@
           <div class="invoice-card" id="trackCard"></div>
         </div>
 
-        <!-- ✅ INVOICE -->
         <div class="invoice-wrap" id="invoiceWrap">
           <div class="invoice-head">
             <div>
@@ -298,11 +300,9 @@
         </div>
       </div>
 
-      <!-- PRINT-ONLY BLOCK -->
       <section class="print-area" id="printArea"></section>
     </section>
 
-    <!-- ABOUT -->
     <section class="route" id="route-about" data-route="about">
       <div class="page-hero">
         <div class="hero-left">
@@ -396,7 +396,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section class="route" id="route-contact" data-route="contact">
       <div class="page-head">
         <h1>Contact Us</h1>
@@ -449,7 +448,6 @@
       </div>
     </section>
 
-    <!-- LOGIN -->
     <section class="route" id="route-login" data-route="login">
       <div class="auth-wrap">
         <div class="auth-card">
@@ -483,7 +481,6 @@
       </div>
     </section>
 
-    <!-- REGISTER -->
     <section class="route" id="route-register" data-route="register">
       <div class="auth-wrap">
         <div class="auth-card">
@@ -558,7 +555,6 @@
   <div id="compareItems" class="panel-body"></div>
 </aside>
 
-<!-- DETAILS MODAL -->
 <div class="modal" id="productModal" aria-hidden="true">
   <div class="modal-overlay" data-close="1"></div>
   <div class="modal-card" role="dialog" aria-modal="true" aria-label="Item details">
@@ -572,6 +568,70 @@
     </div>
   </div>
 </div>
+
+<!-- ✅ Side widgets headings: RGB animated text via <span class="sw-rgb"> -->
+<aside class="side-widgets left" id="leftWidgets" aria-label="Left widgets">
+  <div class="sw-card">
+    <div class="sw-title"><i class="fa-solid fa-fire"></i> <span class="sw-rgb">Today’s Highlights</span></div>
+    <div class="sw-sub" id="hlSub">Hot picks & quick tips</div>
+    <ul class="sw-list" id="highlightsList">
+      <li><i class="fa-solid fa-bolt"></i> Instant delivery games available</li>
+      <li><i class="fa-solid fa-shield"></i> Verified items & safe checkout</li>
+      <li><i class="fa-solid fa-star"></i> Check ratings before buying</li>
+      <li><i class="fa-solid fa-tags"></i> Weekend deals rotate regularly</li>
+    </ul>
+  </div>
+
+  <div class="sw-card">
+    <div class="sw-title"><i class="fa-solid fa-ranking-star"></i> <span class="sw-rgb">Top Rated</span></div>
+    <div class="sw-sub">Based on store ratings</div>
+    <div class="sw-mini" id="topRatedBox">
+      <div class="sw-muted">Loading…</div>
+    </div>
+  </div>
+
+  <div class="sw-card">
+    <div class="sw-title"><i class="fa-solid fa-square-poll-vertical"></i> <span class="sw-rgb">Community Poll</span></div>
+    <div class="sw-sub">What are you buying next?</div>
+    <div class="sw-poll" id="pollBox">
+      <button class="sw-pill" type="button" data-poll="PC"><i class="fa-solid fa-desktop"></i> PC</button>
+      <button class="sw-pill" type="button" data-poll="Laptop"><i class="fa-solid fa-laptop"></i> Laptop</button>
+      <button class="sw-pill" type="button" data-poll="Accessories"><i class="fa-solid fa-headphones"></i> Accessories</button>
+      <button class="sw-pill" type="button" data-poll="Games"><i class="fa-solid fa-gamepad"></i> Games</button>
+    </div>
+    <div class="sw-note" id="pollMsg">Vote to see results.</div>
+  </div>
+</aside>
+
+<aside class="side-widgets right" id="rightWidgets" aria-label="Right widgets">
+  <div class="sw-card">
+    <div class="sw-title"><i class="fa-solid fa-sparkles"></i> <span class="sw-rgb">New Arrivals</span></div>
+    <div class="sw-sub">Fresh picks for your setup</div>
+    <div class="sw-mini" id="newArrivalsBox">
+      <div class="sw-muted">Loading…</div>
+    </div>
+  </div>
+
+  <div class="sw-card">
+    <div class="sw-title"><i class="fa-solid fa-headset"></i> <span class="sw-rgb">Quick Help</span></div>
+    <ul class="sw-list">
+      <li><i class="fa-solid fa-circle-check"></i> Digital games: email delivery</li>
+      <li><i class="fa-solid fa-truck-fast"></i> Physical items: delivery charge may apply</li>
+      <li><i class="fa-solid fa-lock"></i> Payment ref required to place order</li>
+      <li><i class="fa-solid fa-rotate"></i> Tracking updates on success screen</li>
+    </ul>
+  </div>
+
+  <div class="sw-card">
+    <div class="sw-title"><i class="fa-solid fa-envelope-open-text"></i> <span class="sw-rgb">Deal Alerts</span></div>
+    <div class="sw-sub">Get price-drop & coupon news</div>
+    <form class="sw-form" id="swNewsForm">
+      <input class="sw-input" id="swNewsEmail" type="email" placeholder="your@email.com" required>
+      <button class="sw-btn" type="submit"><i class="fa-solid fa-bell"></i> Subscribe</button>
+    </form>
+    <div class="sw-note" id="swNewsMsg"></div>
+  </div>
+</aside>
 
 <footer class="footer">
   <div class="footer-grid">
