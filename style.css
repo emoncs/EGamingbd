@@ -2098,3 +2098,162 @@ body{background:var(--bg); color:var(--text);}
     box-shadow: 0 0 0 5px rgba(0,255,136,.14);
   }
 }
+/* =========================================================
+   ✅ RESPONSIVE PATCH (APPEND AT END) — keep design same
+   ========================================================= */
+
+/* 1) Safer fluid typography + spacing (no visual change on desktop) */
+:root{
+  --pad: clamp(12px, 2.2vw, 16px);
+  --gap: clamp(10px, 2vw, 14px);
+}
+
+.container{ padding: 0 var(--pad); }
+.page{ padding: clamp(14px, 3vw, 22px) 0 10px; }
+
+/* 2) Prevent layout breaking due to long text */
+.logo, .brand, .ptitle, .cart-name, .compare-name, .sum-name, .inv-name, .sw-name{
+  max-width: 100%;
+}
+
+/* 3) Make top navbar wrap nicely on smaller widths */
+.nav-container{
+  padding: 12px var(--pad);
+  gap: 10px;
+}
+.nav-actions{
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Buttons: keep same design, improve tap targets + wrapping */
+.nav-btn{
+  padding: 10px 16px;
+  min-height: 42px;
+}
+.nav-toggle{
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* 4) Product grid becomes smoother across devices */
+.products{
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+@media (max-width: 520px){
+  .products{
+    grid-template-columns: 1fr; /* best for very small phones */
+    gap: 12px;
+  }
+  .pcard{ padding: 12px; }
+  .pimg{ height: 190px; } /* a bit bigger on phone */
+}
+
+/* 5) Filters: better stacking + field height */
+.filters{ gap: 10px; }
+.field{ min-height: 44px; }
+.filters input, .filters select{ font-size: 14px; }
+
+/* 6) Page hero / headings scale nicely */
+.hero-left h1{
+  font-size: clamp(26px, 5.2vw, 38px);
+}
+.page-head h1{
+  font-size: clamp(24px, 5vw, 34px);
+}
+.home-head h2{
+  font-size: clamp(18px, 4.2vw, 22px);
+}
+
+/* 7) Panels (Cart/Compare) — better on mobile + short screens */
+.panel{
+  height: min(72vh, 620px);
+}
+@media (max-width: 900px){
+  .panel{
+    top: 78px;                 /* reduce top gap */
+    height: min(76vh, 640px);  /* more usable */
+  }
+}
+@media (max-height: 700px){
+  .panel{
+    height: 78vh;              /* short screens fix */
+  }
+}
+
+/* 8) Modal — prevent overflow on smaller screens */
+.modal-card{
+  margin: 6vh auto;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+}
+.modal-body{
+  overflow: auto;
+  max-height: calc(88vh - 72px); /* leaves room for header/foot feel */
+}
+@media (max-width: 520px){
+  .modal-card{ margin: 4vh auto; border-radius: 16px; }
+  .modal-body{ padding: 14px; }
+  .modal-foot{ padding: 12px 14px; }
+}
+
+/* 9) Checkout/Invoice grids: nicer stacking */
+.checkout-grid, .pd-grid, .page-hero, .contact-grid, .track-grid{
+  gap: 12px;
+}
+
+/* 10) Floating buttons — avoid covering content on tiny devices */
+.floating{
+  right: 14px;
+  border-radius: 14px;
+}
+@media (max-width: 420px){
+  .floating{
+    right: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  .compare{ bottom: 84px; }
+  .cart{ bottom: 26px; }
+}
+
+/* 11) Sticky social — smaller + safer position */
+@media (max-width: 520px){
+  .sticky-social{
+    right: 10px;
+    top: 62%;
+    gap: 8px;
+  }
+  .sticky-social .ss{
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+}
+
+/* 12) Dropdown menu tap-friendly on mobile */
+@media (max-width: 900px){
+  .menu a{ padding: 12px 12px; }
+  .dropdown-menu a{ padding: 12px 12px; }
+}
+
+/* 13) Prevent horizontal scroll bugs */
+html, body{ overflow-x: hidden; }
+.navbar, .container, .route, .page, .footer{ max-width: 100%; }
+
+/* 14) Images should never overflow */
+img{ max-width: 100%; height: auto; }
+
+/* 15) Better touch feedback (no design change) */
+@media (hover: none){
+  .pcard:hover,
+  .btn-dark:hover,
+  .btn-ghost:hover,
+  .checkout-btn:hover,
+  .nav-btn:hover{
+    transform: none;
+    box-shadow: inherit;
+  }
+}
+
